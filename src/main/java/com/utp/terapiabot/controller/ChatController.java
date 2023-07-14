@@ -1,9 +1,12 @@
 package com.utp.terapiabot.controller;
 
 import com.utp.terapiabot.entity.Chat;
+import com.utp.terapiabot.request.ChatLineRequest;
 import com.utp.terapiabot.request.ChatRequest;
+import com.utp.terapiabot.response.ChatLineResponse;
 import com.utp.terapiabot.response.ChatResponse;
 import com.utp.terapiabot.response.ResponseHandler;
+import com.utp.terapiabot.services.ChatLineService;
 import com.utp.terapiabot.services.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,8 @@ public class ChatController {
 
     @Autowired
     private ChatService chatService;
+    @Autowired
+    private ChatLineService chatLineService;
 
     @PostMapping
     public ResponseEntity<Object> guardarChat(@RequestBody ChatRequest chatRequest) {
@@ -33,6 +38,20 @@ public class ChatController {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
         } finally {
             log.info("[END] endpoint POST /api/chats :: guardarChat");
+        }
+    }
+
+    @PostMapping("/chatline")
+    public ResponseEntity<Object> guardarChatLine(@RequestBody ChatLineRequest chatLineRequest) {
+        try {
+            log.info("[START] endpoint POST /api/chats/chatline :: guardarChatLine -  chatLineRequest: {}", chatLineRequest);
+            ChatLineResponse chatLineResponse = chatLineService.guardarChatLine(chatLineRequest);
+            return ResponseHandler.generateResponse("Saved", HttpStatus.OK, chatLineResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+        } finally {
+            log.info("[END] endpoint POST /api/chats/chatline :: guardarChatLine");
         }
     }
 

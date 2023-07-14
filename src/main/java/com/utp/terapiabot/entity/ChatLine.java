@@ -2,10 +2,7 @@ package com.utp.terapiabot.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -18,11 +15,10 @@ import java.util.Date;
 public class ChatLine {
     @Id
     @Column(name = "idchat_line")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "idchat")
     private int idChat;
-    @Column(name = "idpaciente")
-    private int idPaciente;
     @Column(name = "message_request")
     private String messageRequest;
     @Column(name = "message_response")

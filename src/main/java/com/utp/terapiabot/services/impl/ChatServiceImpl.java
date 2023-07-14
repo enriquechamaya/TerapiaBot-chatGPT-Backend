@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -19,6 +20,7 @@ public class ChatServiceImpl implements ChatService {
     private ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public ChatResponse guardarChat(ChatRequest chatRequest) throws Exception {
         log.info("Inicio - ChatServiceImpl::guardarChat - chatRequest: {}", chatRequest);
         Chat chatFound = chatRepository.findByIdTemaAndIdPaciente(chatRequest.getIdTema(), chatRequest.getIdPaciente());
