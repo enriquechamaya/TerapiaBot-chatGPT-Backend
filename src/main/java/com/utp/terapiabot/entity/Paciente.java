@@ -18,4 +18,5 @@ public class Paciente {
     private String usuario;
     private String dni;
     private int estado;
+
 }

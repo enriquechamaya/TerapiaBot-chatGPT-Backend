@@ -2,9 +2,7 @@ package com.utp.terapiabot.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -16,8 +14,13 @@ import java.util.Date;
 public class Chat {
     @Id
     @Column(name = "idchat")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "idtema")
     private int idTema;
+    @Column(name = "idpaciente")
+    private int idPaciente;
+    @Column(name = "createdate")
     private Date createDate;
     private int estado;
 }

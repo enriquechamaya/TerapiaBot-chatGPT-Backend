@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class PacienteRequest {
-    private Integer id;
+    private int id;
     private String usuario;
     private String dni;
-    private Integer estado = 1;
+    private int estado = 1;
 }
