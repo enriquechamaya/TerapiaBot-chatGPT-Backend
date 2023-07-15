@@ -7,6 +7,7 @@ import com.utp.terapiabot.request.ChatLineRequest;
 import com.utp.terapiabot.response.ChatLineResponse;
 import com.utp.terapiabot.response.ChatResponse;
 import com.utp.terapiabot.services.ChatLineService;
+import io.github.flashvayne.chatgpt.service.ChatgptService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,15 @@ public class ChatLineServiceImpl implements ChatLineService {
     @Autowired
     private ChatLineRepository chatLineRepository;
     @Autowired
+    private ChatgptService chatgptService;
+    @Autowired
     private ModelMapper modelMapper;
 
     @Override
     @Transactional
     public ChatLineResponse guardarChatLine(ChatLineRequest chatLineRequest) {
         log.info("Inicio - ChatServiceImpl::guardarChatLine - chatLineRequest: {}", chatLineRequest);
+        responseChatGPT(chatLineRequest);
         ChatLine chatLine = chatLineRepository.save(modelMapper.map(chatLineRequest, ChatLine.class));
         ChatLineResponse chatLineResponse = modelMapper.map(chatLine, ChatLineResponse.class);
         log.info("Fin - ChatServiceImpl::guardarChatLine - chatLineResponse: {}", chatLineResponse);
@@ -47,5 +51,11 @@ public class ChatLineServiceImpl implements ChatLineService {
         }
         log.info("Fin - ChatServiceImpl::listarChatLine - chatLineList: {}", chatLineResponseList);
         return chatLineResponseList;
+    }
+
+    private void responseChatGPT(ChatLineRequest chatLineRequest) {
+        String response = chatgptService.sendMessage(chatLineRequest.getMessageRequest());
+        log.info("ChatServiceImpl::responseChatGPT - response: {}", response);
+        chatLineRequest.setMessageResponse(response);
     }
 }
