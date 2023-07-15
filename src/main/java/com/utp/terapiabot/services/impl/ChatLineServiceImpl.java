@@ -13,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 @Slf4j
 public class ChatLineServiceImpl implements ChatLineService {
@@ -29,5 +33,19 @@ public class ChatLineServiceImpl implements ChatLineService {
         ChatLineResponse chatLineResponse = modelMapper.map(chatLine, ChatLineResponse.class);
         log.info("Fin - ChatServiceImpl::guardarChatLine - chatLineResponse: {}", chatLineResponse);
         return chatLineResponse;
+    }
+
+    @Override
+    public List<ChatLineResponse> listarChatLine(Integer idChat) throws Exception {
+        log.info("Inicio - ChatServiceImpl::listarChatLine - idChat: {}", idChat);
+        List<ChatLine> chatLineList = chatLineRepository.findAllByIdChat(idChat);
+        List<ChatLineResponse> chatLineResponseList;
+        if (!chatLineList.isEmpty()) {
+            chatLineResponseList = Arrays.asList(modelMapper.map(chatLineList, ChatLineResponse[].class));
+        } else {
+            throw new Exception("El historial del chat con id: " + idChat + " está vacío.");
+        }
+        log.info("Fin - ChatServiceImpl::listarChatLine - chatLineList: {}", chatLineResponseList);
+        return chatLineResponseList;
     }
 }

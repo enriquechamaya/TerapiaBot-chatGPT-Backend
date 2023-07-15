@@ -12,10 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/chats")
@@ -52,6 +51,20 @@ public class ChatController {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
         } finally {
             log.info("[END] endpoint POST /api/chats/chatline :: guardarChatLine");
+        }
+    }
+
+    @GetMapping("/chatline/{idChat}")
+    public ResponseEntity<Object> listarChatLine(@PathVariable Integer idChat) {
+        try {
+            log.info("[START] endpoint GET /api/chats/chatline :: listarChatLine -  idChat: {}", idChat);
+            List<ChatLineResponse> chatLineResponseList = chatLineService.listarChatLine(idChat);
+            return ResponseHandler.generateResponse("List", HttpStatus.OK, chatLineResponseList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.MULTI_STATUS, null);
+        } finally {
+            log.info("[END] endpoint GET /api/chats/chatline :: listarChatLine");
         }
     }
 
